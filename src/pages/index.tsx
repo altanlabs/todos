@@ -1,16 +1,17 @@
-import { motion } from "framer-motion"
-import { ArrowRight, Component, Palette, Zap } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { motion } from "framer-motion";
+import { ArrowRight, Component, Palette, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Accordion } from "@/components/ui/accordion";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5 }
-}
+};
 
 const staggerContainer = {
   animate: {
@@ -18,10 +19,25 @@ const staggerContainer = {
       staggerChildren: 0.1
     }
   }
-}
+};
+
+const categories = [
+  {
+    name: "Marketing",
+    subcategories: ["Social Media", "Email Campaigns", "SEO"]
+  },
+  {
+    name: "Finance",
+    subcategories: ["Budgeting", "Invoicing", "Payroll"]
+  },
+  {
+    name: "Development",
+    subcategories: ["Repo1", "Repo2", "Repo3"]
+  }
+];
 
 export default function IndexPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="container mx-auto px-4 py-16 space-y-32">
@@ -46,6 +62,45 @@ export default function IndexPage() {
         <Button size="lg" className="mt-4" onClick={() => navigate('/dashboard')}>
           View sample dashboard <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
+      </motion.section>
+
+      {/* Categories Section */}
+      <motion.section
+        variants={staggerContainer}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+        className="space-y-8"
+      >
+        <motion.div variants={fadeInUp} className="text-center">
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+            Manage Your Todos
+          </h2>
+          <p className="mx-auto mt-4 max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+            Organize your tasks by categories and subcategories.
+          </p>
+        </motion.div>
+
+        <Accordion type="single" collapsible className="w-full">
+          {categories.map((category, index) => (
+            <Accordion.Item key={index} value={category.name}>
+              <Accordion.Header>
+                <Accordion.Trigger className="text-lg font-semibold">
+                  {category.name}
+                </Accordion.Trigger>
+              </Accordion.Header>
+              <Accordion.Content>
+                <ul className="list-disc pl-5">
+                  {category.subcategories.map((sub, subIndex) => (
+                    <li key={subIndex} className="text-muted-foreground">
+                      {sub}
+                    </li>
+                  ))}
+                </ul>
+              </Accordion.Content>
+            </Accordion.Item>
+          ))}
+        </Accordion>
       </motion.section>
 
       {/* Features Section */}
@@ -149,5 +204,5 @@ export default function IndexPage() {
         </motion.div>
       </motion.section>
     </div>
-  )
+  );
 }
